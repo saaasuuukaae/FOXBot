@@ -39,8 +39,10 @@ class ParseMessages(Cog):
 
 		return True
 
-	async def process(self, message: disnake.Message, manager: JsonManager,
-	                  embed=False):
+	async def process(
+			self, message: disnake.Message, manager: JsonManager,
+			embed=False
+	):
 
 		embed_message = disnake.Embed(
 			title="Message",
@@ -59,15 +61,31 @@ class ParseMessages(Cog):
 			text=config.embed_footer
 		)
 
-
 		for _ in manager.guilds:
 			guild = self.bot.get_guild(_.id)
+
+			if guild is None:
+				print("Unable to get guild with ID={}".format(_.id))
+				continue
 			for c in _.channels:
+
 				channel = guild.get_channel(c)
-				if embed:
-					await channel.send(embeds=[embed_message])
-				else:
-					await channel.send(message.content)
+				if channel is None:
+					print(
+						"Unable to get channel with ID={}\nguild.id={}".
+						format(c, guild.id)
+					)
+					continue
+
+				try:
+					if embed:
+						await channel.send(embeds=[embed_message])
+					else:
+						await channel.send(message.content)
+				except Exception as exc:
+					print("An error occurred: {}\n"
+					      "When tried to send message to channel {} in "
+					      "the guild = {}".format(exc, channel.id, guild.id))
 
 	@Cog.listener(
 		name='on_message',
