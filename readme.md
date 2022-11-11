@@ -1,7 +1,7 @@
 # Fox bot
 
 
-#### Author - https://github.com/saaasuuukaae/
+#### Author - https://github.com/yatochka-dev/
 #### My discord - А я Ята#7777(686207718822117463)
 
 
